@@ -74,13 +74,10 @@ while (($a > 0))
 do
 date >> nc.log
 nc -zv 192.168.5.108 80 &>> nc.log
-sleep 1
 date >> nc.log
 nc -zv 192.168.5.162 80 &>> nc.log
-sleep 1
 date >> nc.log
 nc -zv 192.168.5.2 80 &>> nc.log
-sleep 1
 let "a=a-1"
 done
 cat -n nc.log #выведем итог и пронумеруем строки для наглядности
