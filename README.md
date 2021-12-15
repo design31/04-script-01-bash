@@ -121,9 +121,42 @@ us@ubuntu:~$ ./script.sh
 Необходимо дописать скрипт из предыдущего задания так, чтобы он выполнялся до тех пор, пока один из узлов не окажется недоступным. Если любой из узлов недоступен - IP этого узла пишется в файл error, скрипт прерывается.
 
 ### Ваш скрипт:
-```bash
-???
 ```
+#!/usr/bin/env bash
+while ((1==1))
+do
+nc -zv 192.168.5.108 80
+if (($? !=0))
+then
+echo IP 192.168.5.108 port 80 unavailable > error.log
+break
+else
+nc -zv 192.168.5.162 80
+if (($? !=0))
+then
+echo IP 192.168.5.162 port 80 unavailable > error.log
+break
+else
+nc -zv 192.168.5.2 80
+if (($? !=0))
+then
+echo IP 192.168.5.2 port 80 unavailable > error.log
+break
+fi
+fi
+fi
+done
+```
+
+Проверим лог ошибок. Я остановил apache2 и гляну на error.log:
+```
+#us@ubuntu:~$ cat error.log
+IP 192.168.5.162 port 80 unavailable
+```
+
+Скрипт кохозный, но он работает, проверено! 
+
+--- 
 
 ## Дополнительное задание (со звездочкой*) - необязательно к выполнению
 
