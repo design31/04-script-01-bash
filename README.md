@@ -67,18 +67,21 @@ done
 ### Ваш скрипт:
 
 Проверять доступность решил с помощью netstat:
+
+Поправленный скрипт с использованием циклов:
 ```
 #!/usr/bin/env bash
+ip=("192.168.5.108" "192.168.5.162" "192.168.5.2")
+port=80
 a=5
 while (($a > 0))
 do
-date >> nc.log
-nc -zv 192.168.5.108 80 &>> nc.log
-date >> nc.log
-nc -zv 192.168.5.162 80 &>> nc.log
-date >> nc.log
-nc -zv 192.168.5.2 80 &>> nc.log
-let "a=a-1"
+  for i in ${ip[@]}
+    do
+      date >> nc.log
+      nc -zv $i $port &>> nc.log
+    done
+    let "a=a-1"
 done
 cat -n nc.log #выведем итог и пронумеруем строки для наглядности
 ```
@@ -121,32 +124,26 @@ us@ubuntu:~$ ./script.sh
 Необходимо дописать скрипт из предыдущего задания так, чтобы он выполнялся до тех пор, пока один из узлов не окажется недоступным. Если любой из узлов недоступен - IP этого узла пишется в файл error, скрипт прерывается.
 
 ### Ваш скрипт:
+Поправленный скрипт с использованием циклов:
 ```
 #!/usr/bin/env bash
+ip=("192.168.5.108" "192.168.5.162" "192.168.5.2")
+port=80
+
 while ((1==1))
 do
-nc -zv 192.168.5.108 80
-if (($? !=0))
-then
-echo IP 192.168.5.108 port 80 unavailable > error.log
-break
-else
-nc -zv 192.168.5.162 80
-if (($? !=0))
-then
-echo IP 192.168.5.162 port 80 unavailable > error.log
-break
-else
-nc -zv 192.168.5.2 80
-if (($? !=0))
-then
-echo IP 192.168.5.2 port 80 unavailable > error.log
-break
-fi
-fi
-fi
+for i in ${ip[@]}
+  do
+    nc -zv $i $port
+    if (($? != 0))
+    then
+      echo $i > error
+      exit 1
+    fi
+  done
 done
 ```
+
 
 Проверим лог ошибок. Я остановил apache2 и гляну на error.log:
 ```
