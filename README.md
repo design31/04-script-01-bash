@@ -147,11 +147,9 @@ done
 
 Проверим лог ошибок. Я остановил apache2 и гляну на error.log:
 ```
-#us@ubuntu:~$ cat error.log
-IP 192.168.5.162 port 80 unavailable
+us@ubuntu:~$ cat error
+192.168.5.162
 ```
-
-Скрипт колхозный, но он работает, проверено! 
 
 --- 
 
